@@ -15,7 +15,7 @@ class ReportingFile:
 
         Args:
             file_name (str): Name of the bank statement file
-            statements_folder (str): Location of bank statement(s)
+            statements_folder (dict): Location of bank statement(s)
             file_name_date_format (str): Format of the data in the file name
                 (if included)
         """
@@ -37,7 +37,7 @@ class ReportingFile:
             self.f_name
         )
         try:
-            log.debug(f" Extracting statement dates")
+            # log.debug(f" Extracting statement dates")
             self.start_date = s_dates[0][
                 self.f_name_date_format["start_date_re_index"]
             ]
@@ -45,17 +45,19 @@ class ReportingFile:
                 self.f_name_date_format["end_date_re_index"]
             ]
         except IndexError:
-            log.warning(f" Dates not recognised in file name {self.f_name}")
+            # log.warning(f" Dates not recognised in file name {self.f_name}")
+            print("Warning hidden")
         except TypeError:
-            log.warning(f" Start/End date not given in its file name")
+            # log.warning(f" Start/End date not given in its file name")
+            print("Warning hidden")
 
     def parse_file(self) -> None:
-        log.debug(f" Parsing statement")
+        # log.debug(f" Parsing statement")
         self.statement = pd.read_csv(
             f"{self.s_folder}{self.f_name}", 
             encoding='latin-1' # Account for errored entries
         )
-        log.debug(f"Statement head:\n {self.statement.head()}")
+        # log.debug(f"Statement head:\n {self.statement.head()}")
 
     def typecast_table(self) -> None:
         self.statement  = self.statement.astype(self.tx_schema)
